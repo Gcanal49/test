@@ -35,6 +35,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 24px;
+    margin-top: 20px;
   }
   .product-card {
     background: white;
@@ -125,8 +126,6 @@
 </style>
 
 <div class="shop-container">
-
-  <!-- ENCABEZADO -->
   <div class="shop-header">
     <div>
       <h1 style="margin:0; font-size: 1.8rem; color:#0f172a;">🛠️ Mundimotos Express</h1>
@@ -136,11 +135,12 @@
       🛒 Carrito (<span id="cart-count">0</span>)
     </button>
   </div>
+</div>
 
-  <!-- GRID DE PRODUCTOS -->
+---
+
+<div class="shop-container">
   <div class="products-grid">
-    
-    <!-- Producto 1 -->
     <div class="product-card">
       <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=400" class="product-img">
       <div class="product-info">
@@ -149,8 +149,6 @@
         <button class="btn-add-cart" onclick="addToCart('Casco Integral Certificado', 280000)">Añadir al Carrito</button>
       </div>
     </div>
-
-    <!-- Producto 2 -->
     <div class="product-card">
       <img src="https://images.unsplash.com/photo-1615887023516-9b6bcd559e87?w=400" class="product-img">
       <div class="product-info">
@@ -159,8 +157,6 @@
         <button class="btn-add-cart" onclick="addToCart('Kit de Arrastre Premium', 145000)">Añadir al Carrito</button>
       </div>
     </div>
-
-    <!-- Producto 3 -->
     <div class="product-card">
       <img src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=400" class="product-img">
       <div class="product-info">
@@ -169,38 +165,27 @@
         <button class="btn-add-cart" onclick="addToCart('Pastillas de Freno Sinterizadas', 65000)">Añadir al Carrito</button>
       </div>
     </div>
-
   </div>
-
 </div>
 
-<!-- MODAL DEL CARRITO (CHECKOUT) -->
 <dialog id="cartModal">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
     <h2 style="margin:0; font-size:1.4rem;">🛍️ Tu Pedido</h2>
     <button onclick="closeCart()" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">❌</button>
   </div>
-  
-  <div id="cart-items-container">
-    <!-- Los productos agregados se renderizan aquí dinámicamente -->
-  </div>
-  
+  <div id="cart-items-container"></div>
   <div class="cart-total">
     Total: <span id="cart-total-val">$0</span>
   </div>
-  
   <button class="btn-checkout" onclick="sendWhatsAppCheckout()">
     💬 Confirmar y Pedir por WhatsApp
   </button>
 </dialog>
 
-<!-- MOTOR JAVASCRIPT DEL CARRITO -->
 <script>
-  // Arreglo global para almacenar los productos del carrito
   let cart = [];
 
   function addToCart(name, price) {
-    // Buscar si el producto ya existe en el carrito
     const existingItem = cart.find(item => item.name === name);
     if (existingItem) {
       existingItem.quantity += 1;
@@ -211,25 +196,19 @@
   }
 
   function updateCartUI() {
-    // Actualizar el contador del botón superior
     const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
     document.getElementById('cart-count').innerText = totalCount;
-
-    // Actualizar los elementos dentro del modal
     const container = document.getElementById('cart-items-container');
     if(cart.length === 0) {
       container.innerHTML = '<p style="color:#64748b; text-align:center;">El carrito está vacío</p>';
       document.getElementById('cart-total-val').innerText = '$0';
       return;
     }
-
     container.innerHTML = '';
     let totalMoney = 0;
-
     cart.forEach((item, index) => {
       const itemTotal = item.price * item.quantity;
       totalMoney += itemTotal;
-      
       container.innerHTML += `
         <div class="cart-item">
           <div>
@@ -243,7 +222,6 @@
         </div>
       `;
     });
-
     document.getElementById('cart-total-val').innerText = '$' + totalMoney.toLocaleString('es-CO');
   }
 
@@ -262,31 +240,20 @@
 
   function sendWhatsAppCheckout() {
     if(cart.length === 0) {
-      alert('Añade al menos un producto para realizar el pedido.');
+      alert('Añade al menos un producto.');
       return;
     }
-
-    // Configura aquí tu número de WhatsApp (código de país + número, sin espacios ni el signo +)
     const phoneNumber = "573000000000"; 
-    
     let message = "🤖 *Nuevo Pedido - Mundimotos Express*\n\n";
     let totalMoney = 0;
-
     cart.forEach(item => {
       const itemTotal = item.price * item.quantity;
       totalMoney += itemTotal;
       message += `▪️ ${item.quantity}x ${item.name} ($${itemTotal.toLocaleString('es-CO')})\n`;
     });
-
-    message += `\n💰 *Total a pagar:* $${totalMoney.toLocaleString('es-CO')}\n\n`;
-    message += "Por favor, confírmenme la disponibilidad para coordinar el pago y el envío. 👍";
-
-    // Codificar el texto para que sea válido en una URL
+    message += `\n💰 *Total:* $${totalMoney.toLocaleString('es-CO')}\n`;
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
-
-    // Abrir ventana de WhatsApp y limpiar carrito
-    window.open(whatsappUrl, '_blank');
+    window.open(`https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`, '_blank');
     cart = [];
     updateCartUI();
     closeCart();
