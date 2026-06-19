@@ -1,88 +1,108 @@
 <style>
-  /* Cambiar a una tipografía moderna del sistema y mejorar el espaciado */
   .markdown-section {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: #2c3e50;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #334155;
     line-height: 1.6;
   }
   
-  /* Personalizar los títulos principales con un color de marca (ej. Azul Oscuro) */
-  .markdown-section h1, .markdown-section h2 {
-    color: #1a365d;
-    border-bottom: none;
-    font-weight: 700;
-  }
-
-  /* Diseñar una tabla estilizada y limpia */
-  .markdown-section table {
-    width: 100%;
-    border-collapse: collapse;
+  /* Contenedor Flex para layouts modernos (Texto al lado de Imagen) */
+  .flex-container {
+    display: flex;
+    gap: 24px;
+    align-items: center;
     margin: 20px 0;
-    font-size: 0.95rem;
   }
-  .markdown-section th {
-    background-color: #f7fafc;
-    color: #4a5568;
-    font-weight: 600;
-    border-bottom: 2px solid #e2e8f0;
-    padding: 12px;
+  .flex-image {
+    flex: 1;
+    max-width: 250px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
-  .markdown-section td {
-    padding: 12px;
-    border-bottom: 1px solid #edf2f7;
+  .flex-text { flex: 2; }
+
+  /* Barra de progreso/expansión visual */
+  .progress-bar-bg {
+    background-color: #e2e8f0;
+    border-radius: 9999px;
+    width: 100%;
+    height: 12px;
+    margin: 8px 0 20px 0;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    background: linear-gradient(90deg, #3b82f6, #10b981);
+    height: 100%;
+    width: 75%; /* Controla el porcentaje aquí */
+    border-radius: 9999px;
   }
 
-  /* Convertir enlaces específicos en botones Pro */
-  .markdown-section .btn-primario {
+  /* Pop-up / Modal controlado por HTML nativo (<dialog>) */
+  dialog {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    padding: 24px;
+    max-width: 400px;
+  }
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+  
+  /* Botones Pro */
+  .btn {
     display: inline-block;
-    background-color: #3182ce; /* Azul vibrante */
-    color: #ffffff !important;
-    padding: 10px 20px;
+    padding: 10px 18px;
     border-radius: 6px;
     text-decoration: none;
     font-weight: 600;
-    transition: background 0.2s ease;
-    margin-top: 10px;
+    cursor: pointer;
+    border: none;
   }
-  .markdown-section .btn-primario:hover {
-    background-color: #2b6cb0;
-  }
+  .btn-primary { background-color: #3b82f6; color: white !important; }
+  .btn-secondary { background-color: #64748b; color: white !important; }
 </style>
 
-# 🚀 Lanzamiento de Proyecto: E-Commerce Repuestos
+# 🛒 Ficha de Componente: Módulo E-Commerce
 
-Bienvenido a la documentación oficial del desarrollo de la tienda en línea. Este sitio está generado dinámicamente desde un archivo de texto plano.
-
----
-
-## 📌 Estado de Tareas
-
-- [x] Configuración inicial del repositorio de código.
-- [x] Maquetación de la interfaz responsive (Adaptable a móviles).
-- [ ] Implementación de la pasarela de pagos.
-
-[Ir al Repositorio Principal](# ':class=btn-primario')
+Control de despliegue y empaquetado de assets para la plataforma web.
 
 ---
 
-## 📊 Comparativa de Módulos
+## 📸 Vista Previa del Módulo
 
-| Componente | Tipo de Carga | Prioridad |
-| :--- | :---: | :---: |
-| Catálogo de productos | Dinámica (JSON) | **Alta** |
-| Formulario de contacto | Estática (HTML) | Media |
-| Panel de administración | Protegido | **Alta** |
+<div class="flex-container">
+  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500" class="flex-image" alt="Dashboard Preview">
+  <div class="flex-text">
+    <h3>E-Commerce Core v2.1</h3>
+    <p>Este bloque integra el motor de renderizado de catálogos mediante carga asíncrona de archivos JSON y la gestión automatizada de pedidos por WhatsApp.</p>
+    <button class="btn btn-primary" onclick="document.getElementById('myModal').showModal()">✨ Ver Credenciales de Prueba</button>
+  </div>
+</div>
 
 ---
 
-## 💡 Preguntas Frecuentes
+## 📊 Estado de Implementación (75%)
+
+Uso de barras de estado dinámicas y casillas interactivas[cite: 1]:
+<div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>
+
+- [x] Estructura del backend en PHP[cite: 1].
+- [x] Renderizado de componentes en React[cite: 1].
+- [ ] Conexión final con pasarela de pagos[cite: 1].
+
+---
+
+## ⚙️ Configuración Avanzada
 
 <details>
-<summary>🔍 ¿Cómo se actualizan los precios en el sitio web?</summary>
-Los precios se sincronizan mediante un backend ligero en PHP que lee un archivo de datos estructurado de forma automática cada hora.
-</details>
+<summary>🛠️ Expandir parámetros de inicialización en cPanel</summary>
 
-<details>
-<summary>📱 ¿La interfaz soporta visualización en tablets y teléfonos?</summary>
-Sí, todo el diseño utiliza componentes CSS flexibles que se adaptan a cualquier resolución de pantalla.
-</details>
+Si estás desplegando en subcarpetas de hosting tradicionales, asegúrate de estructurar el archivo `.htaccess` para no romper las rutas de la SPA:
+```apache
+RewriteEngine On
+RewriteBase /tu-subcarpeta/
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /tu-subcarpeta/index.html [L]
